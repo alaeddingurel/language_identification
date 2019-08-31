@@ -1,27 +1,31 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Aug 29 17:17:35 2019
-
-@author: heyo
-"""
-import nltk
 import glob
 import json
 import os
 import re
+import sys
+
+
+
+"""
+print(sys.argv[0])
+"""
 
 
 
 
-path_turkish_extended = "/home/heyo/all_codes/UKPapplication/most_common_words/turkish_extended.txt"
 
+
+"""
 with open(path_turkish_extended) as f:
     content = f.readlines()
 # you may also want to remove whitespace characters like `\n` at the end of each line
 
 content = [x.strip() for x in content]
+"""
 
+
+
+text = sys.argv[1]
 
 def load_languages():
     #LOADING LANGUAGES WORDS
@@ -41,35 +45,21 @@ def load_languages():
 
 
 
-languages_words = load_languages()
-
-identify_language = "Hey, What do you want to say to me?"
+#languages_words = load_languages()
+#identify_language = "Hey, What do you want to say to me?"
 
 
 
 #REGEX TOKENS WITHOUT NLTK
-tokens_regex = re.findall(r"[\w']+", identify_language)
-tokens_regex = [token.lower() for token in tokens_regex]
-
-"""
-all_token = nltk.word_tokenize(identify_language)
-all_token = [token.lower() for token in all_token]
-"""
-
-
-
-
-
-
-
-
-
+def tokenize(text):
+    tokens_regex = re.findall(r"[\w']+", text)
+    tokens_regex = [token.lower() for token in tokens_regex]
+    return tokens_regex
 
 
 #LANGUAGE IDENTIFICATION
-def identify_language(text):
-    tokens_regex = re.findall(r"[\w']+", text)
-    tokens_regex = [token.lower() for token in tokens_regex]
+def identify_language(text, languages_words):
+    tokens_regex = tokenize(text)
     lang_occurence_list = []
     word_frequency_index_list = []
     for lang in languages_words.keys():
@@ -106,13 +96,22 @@ def identify_language(text):
         print(lang_occurence_list.index(max(lang_occurence_list)))
         most_occurred = lang_occurence_list.index(max(lang_occurence_list))
         print("The Language is " + language_list[most_occurred])
-        print(tokens_regex)
+
+
+def main():
+    languages_words = load_languages()
+    identify_language(text, languages_words)
+
+
+if __name__ == "__main__":
+    text = sys.argv[1]
+    print(sys.argv)
+    languages_words = load_languages()
+    identify_language(text, languages_words)
+    #IF MULTIPLE GET OCCURENCES OF LIST 
+#indices = [i for i, x in enumerate(my_list) if x == "whatever"]
 
 
 
-
-
-#IF MULTIPLE GET OCCURENCES OF LIST 
-indices = [i for i, x in enumerate(my_list) if x == "whatever"]
 
 
